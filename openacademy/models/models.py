@@ -68,6 +68,7 @@ class Session(models.Model):
                 record.taken_seats = 0
             else:
                 record.taken_seats = 100.0 * len(record.attendee_ids) / record.seats
+
     @api.onchange('seats','attendee_ids')
     def _verify_valid_seats(self):
         if self.filtered(lambda r: r.seats < 0):
@@ -92,7 +93,7 @@ class Session(models.Model):
     @api.constrains('instructor_id','attendee_ids')
     def _check_instructor_not_in_attendees(self):
         for record in self.filtered('instructor_id'):
-            if record.intructor_id in record.attendee_ids:
+            if record.instructor_id in record.attendee_ids:
                 raise exceptions.ValidationError(
                         "A session's instructor can't be an attendee")
 
