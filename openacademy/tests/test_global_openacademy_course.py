@@ -1,27 +1,46 @@
 # -*- encoding: utf-8 -*-
 
+from psycopg2 import IntegrityError
 from odoo.tests.common import TransactionCase
-
+from odoo.tools import mute_logger
 
 class GlobalTestOpenAcademyCourse(TransactionCase):
+    '''
+    Global test to openacademy course model.
+    Test create course and trigger constraints
+    '''
 
+    # Method seudo-constructor of test setUp
     def setUp(self):
-
+        # Define global variable to test methods
         super(GlobalTestOpenAcademyCourse, self).setUp()
-        self.variable = 'Helo World'
         self.course = self.env['openacademy.course']
 
+
+    # Method of class that don´t is test
     def create_course(self, course_name, course_description, course_responsible_id):
+        # Create a course with parameters received
         course_id = self.course.create({
-            'name': course_name,
-            'description': course_description,
-            'responsible_id': course_responsible_id
+            'name' : course_name,
+            'description' : course_description,
+            'responsible_id' : course_responsible_id,
         })
         return course_id
 
+    # Method os test startswith 'def test_*(self):'
+    # Mute the error odoo.sql_db to avois it in log
+    @mute_logger('odoo.sql_db')
     def test_01_same_name_description(self):
-        self.create_course('JOSE', 'JOSE', None)
-
-
-
+        '''
+        Test create course with same name and description.
+        To test constraint of name different to description.
+        '''
+        # Error reised expected with message expected
+        with self.assertRaisesRegexp(
+                IntegrityError,
+                'new row for relation "openacademy_course" violates'
+                ' check constraint "openacademy_course_name_description_check"'
+                ):
+            # Create a course with same name and description to raise error
+            self.create_course('JOSE', 'JOSE', None)
 
