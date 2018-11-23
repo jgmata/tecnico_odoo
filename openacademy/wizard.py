@@ -3,7 +3,7 @@
 from odoo import models, fields, api
 
 class Wizard(models.TransientModel):
-    _name = 'openacademy.wizard'
+    name = 'openacademy.wizard'
 
     def _default_session(self):
         session_obj = self.env['openacademy.session']
@@ -13,7 +13,7 @@ class Wizard(models.TransientModel):
 
 
     session_ids = fields.Many2many(
-            'openacademy.session', required=True, default=_default_session)
+        'openacademy.session', required=True, default=_default_session)
     attendee_ids = fields.Many2many('res.partner')
 
     @api.multi
