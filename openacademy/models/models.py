@@ -24,18 +24,14 @@ class Course(models.Model):
         # default=lambda self, *a: self.env.uid
         default=get_uid)
     session_ids = fields.One2many('openacademy.session',
-        'course_id', string="Sessions")
+            'course_id', string="Sessions")
 
     _sql_constraints = [
         ('name_description_check',
             'CHECK(name != description)',
-            "The title of the course should not be the description"
-        ),
-        ('name_unique',
-            'UNIQUE(name)',
-            "The course title must be unique",
-         ),
-    ]
+            "The title of the course should not be the description"), (
+                'name_unique', 'UNIQUE(name)',
+                "The course title must be unique", ), ]
 
     @api.multi
     def copy(self, default=None):
@@ -63,7 +59,8 @@ class Session(models.Model):
     duration = fields.Float(digits=(6, 2), help="Duration in days")
     seats = fields.Integer(String="Number of seats")
     instructor_id = fields.Many2one('res.partner', string='instructor',
-        domain=['|', ('instructor', '=', True), ('category_id.name', 'ilike', 'Teacher')])
+        domain=['|', ('instructor', '=', True),
+            ('category_id.name', 'ilike', 'Teacher')])
     course_id = fields.Many2one('openacademy.course', ondelete='cascade',
                                 string='Course', required=True)
     attendee_ids = fields.Many2many('res.partner', string='Attendees')
@@ -72,10 +69,10 @@ class Session(models.Model):
     end_date = fields.Date(store=True,
         _compute='_get_end_date', _inverse='_set_end_date')
     attendees_count = fields.Integer(
-        _compute='_get_attendees_count', store=True)
+            compute='_get_attendees_count', store=True)
     color = fields.Float()
     hours = fields.Float(string="Duration in hours",
-        _compute="_get_hours", _inverse='_set_hours')
+            _compute="_get_hours", _inverse='_set_hours')
 
     @api.depends('duration')
     def _get_hours(self):
