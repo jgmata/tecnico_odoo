@@ -9,21 +9,20 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
     Global test to openacademy course model.
     Test create course and trigger constraints
     '''
-
     # Method seudo-constructor of test setUp
     def setUp(self):
         # Define global variable to test methods
         super(GlobalTestOpenAcademyCourse, self).setUp()
         self.course = self.env['openacademy.course']
 
-
     # Method of class that don´t is test
-    def create_course(self, course_name, course_description, course_responsible_id):
+    def create_course(self, course_name,
+            course_description, course_responsible_id):
         # Create a course with parameters received
         course_id = self.course.create({
-            'name' : course_name,
-            'description' : course_description,
-            'responsible_id' : course_responsible_id,
+            'name': course_name,
+            'description': course_description,
+            'responsible_id': course_responsible_id,
         })
         return course_id
 
@@ -44,8 +43,6 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
             # Create a course with same name and description to raise error
             self.create_course('JOSE', 'JOSE', None)
 
-
-
     # Method os test startswith 'def test_*(self):'
     # Mute the error odoo.sql_db to avois it in log
     @mute_logger('odoo.sql_db')
@@ -55,16 +52,16 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
         To raise constraint of unique name
         '''
 
-        new_id = self.create_course('test1','test description', None)
+        new_id = self.create_course('test1', 'test description', None)
         print("Nuevo Id: %s", new_id)
 
         with self.assertRaisesRegexp(
             IntegrityError,
-            'duplicate key value violates unique constraint "openacademy_course_name_unique"'
+            'duplicate key value violates unique constraint '
+            '"openacademy_course_name_unique"'
             ):
-            new_id2 = self.create_course('test1','test description', None)
+            new_id2 = self.create_course('test1', 'test description', None)
             print("Nuevo Id 2: %s ", new_id2)
-
 
     def test_15_duplicate_course(self):
         '''
@@ -72,4 +69,4 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
         '''
         course = self.env.ref('openacademy.course0')
         course_id = course.copy()
-        print('Course Id: %s',course_id)
+        print('Course Id: %s', course_id)
