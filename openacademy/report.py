@@ -3,6 +3,7 @@
 
 from openerp import api, models
 
+
 class ReportSession(models.AbstractModel):
     _name = "reportdemy.report_session"
 
