@@ -23,8 +23,8 @@ class Course(models.Model):
         index=True, ondelete='set null',
         # default=lambda self, *a: self.env.uid
         default=get_uid)
-    session_ids = fields.One2many('openacademy.session',
-            'course_id', string="Sessions")
+    session_ids = fields.One2many(
+        'openacademy.session', 'course_id', string="Sessions")
 
     _sql_constraints = [
         ('name_description_check',
@@ -58,21 +58,24 @@ class Session(models.Model):
     datetime_test = fields.Datetime(default=fields.Datetime.now)
     duration = fields.Float(digits=(6, 2), help="Duration in days")
     seats = fields.Integer(String="Number of seats")
-    instructor_id = fields.Many2one('res.partner', string='instructor',
+    instructor_id = fields.Many2one(
+        'res.partner', string='instructor',
         domain=['|', ('instructor', '=', True),
-            ('category_id.name', 'ilike', 'Teacher')])
+        ('category_id.name', 'ilike', 'Teacher')])
     course_id = fields.Many2one('openacademy.course', ondelete='cascade',
                                 string='Course', required=True)
     attendee_ids = fields.Many2many('res.partner', string='Attendees')
     taken_seats = fields.Float(_compute='_taken_seats', store=True)
     active = fields.Boolean(default=True)
-    end_date = fields.Date(store=True,
-        _compute='_get_end_date', _inverse='_set_end_date')
+    end_date = fields.Date(
+        store=True, _compute='_get_end_date',
+        _inverse='_set_end_date')
     attendees_count = fields.Integer(
-            compute='_get_attendees_count', store=True)
+        compute='_get_attendees_count', store=True)
     color = fields.Float()
-    hours = fields.Float(string="Duration in hours",
-            _compute="_get_hours", _inverse='_set_hours')
+    hours = fields.Float(
+        string="Duration in hours", _compute="_get_hours",
+        _inverse='_set_hours')
 
     @api.depends('duration')
     def _get_hours(self):
@@ -93,7 +96,7 @@ class Session(models.Model):
         for record in self.filtered('start_date'):
             start_date = fields.Date.from_string(record.start_date)
             record.end_date = (
-                    start_date + timedelta(days=record.duration, seconds=-1))
+                start_date + timedelta(days=record.duration, seconds=-1))
 
     def _set_end_date(self):
         for record in self.filtered('start_date'):
@@ -115,7 +118,7 @@ class Session(models.Model):
         if self.filtered(lambda r: r.seats < 0):
             self.active = False
             return {
-                'warning':{
+                'warning': {
                     'title': _("Incorrect 'seats' value"),
                     'message': _(
                         "The number of available  seats may be negative"),
