@@ -14,36 +14,38 @@ class Course(models.Model):
     name = fields.Char(string="Title", required=True)
     description = fields.Text()
     responsible_id = fields.Many2one(
-        'res.users', string="Responsible",
+        'res.users',string="Responsible",
         index=True, ondelete='set null',
+        #default=lambda self, *a: self.env.uid
         default=get_uid)
+    session_ids = fields.One2many('openacademy.session','course_id',string="Sessions")
 
-    session_ids = fields.One2many('openacademy.session',
-        'course_id', string="Sessions")
-
-    sql_constraints = [
+    _sql_constraints = [
         ('name_description_check',
-            'CHECK(name != description)',
-            "The title of the course should not be the description"
+         'CHECK(name != description)',
+         "The title of the course should not be the description"
         ),
         (
-            'name_unique',
-            'UNIQUE(name)',
-            "The course title must be unique",
-        ),
+         'name_unique',
+         'UNIQUE(name)',
+         "The course title must be unique",
+         ),
     ]
 
     def copy(self, default=None):
         if default is None:
             default={}
         copied_count = self.search_count([
-            ('name', 'ilike',_('Copy of %s%%') % (self.name))])
+            ('name','ilike',_('Copy of %s%%') % (self.name))])
         if not copied_count:
             new_name = _("Copy of %s") % (self.name)
         else:
             new_name = _("Copy of %s (%s)") % (self.name, copied_count)
         default['name'] = new_name
+        #try:
         return super(Course, self).copy(default)
+        #except IntegrityError:
+        #    import pdb; pdb.set_trace()
 
 
 class Session(models.Model):
