@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, exceptions, _
-#from psycopg2 import IntegrityError
+from psycopg2 import IntegrityError
 from datetime import timedelta
-#import time
+import time
 
 def get_uid(self, *a):
     return self.env.uid
@@ -106,20 +106,20 @@ class Session(models.Model):
         if self.filtered(lambda r: r.seats < 0):
             self.active = False
             return {
-                    'warning':{
-                        'title':_("Incorrect 'seats' value"),
-                        'message':_("The number of available seats may be negative"),
-                    }
+                'warning':{
+                    'title':_("Incorrect 'seats' value"),
+                    'message':_("The number of available seats may be negative"),
                 }
+            }
 
         if self.seats < len(self.attendee_ids):
             self.active = False
             return {
-                    'warning':{
-                        'title':_("Too many attendees"),
-                        'message':_("Increase seats or remove excess attendees"),
-                    }
+                'warning':{
+                    'title':_("Too many attendees"),
+                    'message':_("Increase seats or remove excess attendees"),
                 }
+            }
         self.active = True
 
     @api.constrains('instructor_id','attendee_ids')

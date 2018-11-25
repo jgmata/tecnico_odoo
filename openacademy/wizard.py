@@ -3,7 +3,7 @@
 from odoo import models, fields, api
 
 class Wizard(models.TransientModel):
-    name = 'openacademy.wizard'
+    _name = 'openacademy.wizard'
 
     def _default_session(self):
         session_obj = self.env['openacademy.session']
