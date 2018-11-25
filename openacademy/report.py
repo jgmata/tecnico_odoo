@@ -6,7 +6,7 @@ from openerp import api, models
 
 
 class ReportSession(models.AbstractModel):
-    name = "reportdemy.report_session"
+    _name = "reportdemy.report_session"
 
     @api.multi
     def render_html(self, data=None):
