@@ -117,17 +117,16 @@ class Session(models.Model):
         if self.seats < len(self.attendee_ids):
             self.active = False
             return {
-                'warning':{
-                    'title':_("Too many attendees"),
-                    'message':_("Increase seats or remove excess attendees"),
+                'warning': {
+                    'title': _("Too many attendees"),
+                    'message': _("Increase seats or remove excess attendees"),
                 }
             }
         self.active = True
 
-    @api.constrains('instructor_id','attendee_ids')
+    @api.constrains('instructor_id', 'attendee_ids')
     def _check_instructor_not_in_attendees(self):
         for record in self.filtered('instructor_id'):
             if record.instructor_id in record.attendee_ids:
                 raise exceptions.ValidationError(
-                        _("A session's instructor can't be an attendee"))
-
+                    _("A session's instructor can't be an attendee"))
