@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, exceptions, _
-from psycopg2 import IntegrityError
+# from psycopg2 import IntegrityError
 from datetime import timedelta
-import time
+# import time
 
 def get_uid(self, *a):
     return self.env.uid

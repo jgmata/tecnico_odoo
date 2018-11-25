@@ -1,5 +1,5 @@
 
-#from odoo import http
+# from odoo import http
 # class Openacademy(http.Controller):
 #     @http.route('/openacademy/openacademy/', auth='public')
 #     def index(self, **kw):
