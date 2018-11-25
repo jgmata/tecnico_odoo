@@ -1,8 +1,11 @@
 # -*- encoding: utf-8 -*-
 
 from psycopg2 import IntegrityError
+
 from odoo.tests.common import TransactionCase
+
 from odoo.tools import mute_logger
+
 
 class GlobalTestOpenAcademyCourse(TransactionCase):
     '''
@@ -17,7 +20,7 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
 
     # Method of class that don´t is test
     def create_course(self, course_name,
-            course_description, course_responsible_id):
+        course_description, course_responsible_id):
         # Create a course with parameters received
         course_id = self.course.create({
             'name': course_name,
@@ -59,7 +62,7 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
             IntegrityError,
             'duplicate key value violates unique constraint '
             '"openacademy_course_name_unique"'
-            ):
+        ):
             new_id2 = self.create_course('test1', 'test description', None)
             print("Nuevo Id 2: %s ", new_id2)
 
