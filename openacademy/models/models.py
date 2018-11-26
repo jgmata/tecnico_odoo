@@ -60,7 +60,8 @@ class Session(models.Model):
     seats = fields.Integer(String="Number of seats")
     instructor_id = fields.Many2one(
         'res.partner', string='instructor',
-        domain=['|', ('instructor', '=', True),
+        domain=[
+            '|', ('instructor', '=', True),
             ('category_id.name', 'ilike', 'Teacher')])
     course_id = fields.Many2one('openacademy.course', ondelete='cascade',
                                 string='Course', required=True)
