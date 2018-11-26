@@ -20,9 +20,9 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
 
     # Method of class that don´t is test
     # Create a course with parameters received
-    def create_course(self, course_name,
-        course_description, course_responsible_id):
-
+    def create_course(
+            self, course_name, course_description, course_responsible_id):
+        # create a couse with parameters received
         course_id = self.course.create({
             'name': course_name,
             'description': course_description,
